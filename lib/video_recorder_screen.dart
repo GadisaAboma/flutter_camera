@@ -375,6 +375,46 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                         ],
                       ),
                     ),
+                    Positioned(
+                      bottom: MediaQuery.of(context).size.height * .25,
+                      left: 25,
+                      width: MediaQuery.of(context).size.width * .9,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Slider(
+                              value: _currentZoomLevel,
+                              min: _minAvailableZoom,
+                              max: _maxAvailableZoom,
+                              activeColor: Colors.white,
+                              inactiveColor: Colors.white30,
+                              onChanged: (value) async {
+                                setState(() {
+                                  _currentZoomLevel = value;
+                                });
+                                await controller!.setZoomLevel(value);
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  '${_currentZoomLevel.toStringAsFixed(1)}x',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )
               : const Center(
