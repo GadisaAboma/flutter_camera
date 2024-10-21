@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_camera/video_player.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -487,6 +488,175 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                                 color: _currentFlashMode == FlashMode.torch
                                     ? Colors.amber
                                     : Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      width: MediaQuery.of(context).size.width,
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: _isRecordingInProgress
+                                  ? () async {
+                                      if (controller!.value.isRecordingPaused) {
+                                        await resumeVideoRecording();
+                                      } else {
+                                        await pauseVideoRecording();
+                                      }
+                                    }
+                                  : () {
+                                      setState(() {
+                                        _isCameraInitialized = false;
+                                      });
+                                      onNewCameraSelected(cameras[
+                                          _isRearCameraSelected ? 1 : 0]);
+                                      setState(() {
+                                        _isRearCameraSelected =
+                                            !_isRearCameraSelected;
+                                      });
+                                    },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.circle,
+                                    color: Colors.black38,
+                                    size: 60,
+                                  ),
+                                  _isRecordingInProgress
+                                      ? controller!.value.isRecordingPaused
+                                          ? Icon(
+                                              Icons.play_arrow,
+                                              color: Colors.white,
+                                              size: 30,
+                                            )
+                                          : Icon(
+                                              Icons.pause,
+                                              color: Colors.white,
+                                              size: 30,
+                                            )
+                                      : Icon(
+                                          _isRearCameraSelected
+                                              ? Icons.camera_front
+                                              : Icons.camera_rear,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                if (_isRecordingInProgress) {
+                                  XFile? rawVideo = await stopVideoRecording();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const VideoPlayerScreen()));
+                                  File videoFile = File(rawVideo!.path);
+                                  int currentUnix =
+                                      DateTime.now().millisecondsSinceEpoch;
+                                  final directory =
+                                      await getApplicationDocumentsDirectory();
+                                  String fileFormat =
+                                      videoFile.path.split('.').last;
+                                  _videoFile = await videoFile.copy(
+                                    '${directory.path}/$currentUnix.$fileFormat',
+                                  );
+                                } else {
+                                  await startVideoRecording();
+                                }
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    color: Colors.white,
+                                    size: 80,
+                                  ),
+                                  Icon(
+                                    Icons.circle,
+                                    color: Colors.red,
+                                    size: 65,
+                                  ),
+                                  _isRecordingInProgress
+                                      ? Icon(
+                                          Icons.stop_rounded,
+                                          color: Colors.white,
+                                          size: 32,
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                            ),
+                            // InkWell(
+                            //   onTap: _imageFile != null || _videoFile != null
+                            //       ? () {
+                            //           Navigator.of(context).push(
+                            //             MaterialPageRoute(
+                            //               builder: (context) =>
+                            //                   PreviewScreen(),
+                            //             ),
+                            //           );
+                            //         }
+                            //       : null,
+                            //   child: Container(
+                            //     width: 60,
+                            //     height: 60,
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.black,
+                            //       borderRadius: BorderRadius.circular(10.0),
+                            //       border: Border.all(
+                            //         color: Colors.white,
+                            //         width: 2,
+                            //       ),
+                            //       image: _imageFile != null
+                            //           ? DecorationImage(
+                            //               image: FileImage(_imageFile!),
+                            //               fit: BoxFit.cover,
+                            //             )
+                            //           : null,
+                            //     ),
+                            //     child: videoController != null &&
+                            //             videoController!.value.isInitialized
+                            //         ? ClipRRect(
+                            //             borderRadius:
+                            //                 BorderRadius.circular(8.0),
+                            //             child: AspectRatio(
+                            //               aspectRatio: videoController!
+                            //                   .value.aspectRatio,
+                            //               child:
+                            //                   VideoPlayer(videoController!),
+                            //             ),
+                            //           )
+                            //         : Container(),
+                            //   ),
+                            // ),
+                            InkWell(
+                              // onTap: () => selectVideoFromFile(),
+                              child: Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.video_library,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
                               ),
                             ),
                           ],
