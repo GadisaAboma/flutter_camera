@@ -415,6 +415,84 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                         ],
                       ),
                     ),
+                    Positioned(
+                      bottom: MediaQuery.of(context).size.height * .15,
+                      left: 4,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  _currentFlashMode = FlashMode.off;
+                                });
+                                await controller!.setFlashMode(
+                                  FlashMode.off,
+                                );
+                              },
+                              child: Icon(
+                                Icons.flash_off,
+                                color: _currentFlashMode == FlashMode.off
+                                    ? Colors.amber
+                                    : Colors.white,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  _currentFlashMode = FlashMode.auto;
+                                });
+                                await controller!.setFlashMode(
+                                  FlashMode.auto,
+                                );
+                              },
+                              child: Icon(
+                                Icons.flash_auto,
+                                color: _currentFlashMode == FlashMode.auto
+                                    ? Colors.amber
+                                    : Colors.white,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  _currentFlashMode = FlashMode.always;
+                                });
+                                await controller!.setFlashMode(
+                                  FlashMode.always,
+                                );
+                              },
+                              child: Icon(
+                                Icons.flash_on,
+                                color: _currentFlashMode == FlashMode.always
+                                    ? Colors.amber
+                                    : Colors.white,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  _currentFlashMode = FlashMode.torch;
+                                });
+                                await controller!.setFlashMode(
+                                  FlashMode.torch,
+                                );
+                              },
+                              child: Icon(
+                                Icons.highlight,
+                                color: _currentFlashMode == FlashMode.torch
+                                    ? Colors.amber
+                                    : Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 )
               : const Center(
