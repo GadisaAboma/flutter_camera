@@ -22,9 +22,7 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
   CameraController? controller;
   VideoPlayerController? videoController;
   CustomTimerController? _controller;
-  File? _imageFile;
-  File? _videoFile;
-  final ImagePicker _picker = ImagePicker();
+
   XFile? videoFile;
   // Initial values
   bool _isCameraInitialized = false;
@@ -55,38 +53,38 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
       });
       // Set and initialize the new camera
       onNewCameraSelected(cameras[0]);
-      refreshAlreadyCapturedImages();
+      // refreshAlreadyCapturedImages();
     } on CameraException catch (e) {
       print('Error in fetching the cameras: $e');
     } catch (e) {}
   }
 
-  refreshAlreadyCapturedImages() async {
-    final directory = await getApplicationDocumentsDirectory();
-    List<FileSystemEntity> fileList = await directory.list().toList();
-    allFileList.clear();
-    List<Map<int, dynamic>> fileNames = [];
-    for (var file in fileList) {
-      if (file.path.contains('.jpg') || file.path.contains('.mp4')) {
-        allFileList.add(File(file.path));
-        String name = file.path.split('/').last.split('.').first;
-        fileNames.add({0: int.parse(name), 1: file.path.split('/').last});
-      }
-    }
-    if (fileNames.isNotEmpty) {
-      final recentFile =
-          fileNames.reduce((curr, next) => curr[0] > next[0] ? curr : next);
-      String recentFileName = recentFile[1];
-      if (recentFileName.contains('.mp4')) {
-        _videoFile = File('${directory.path}/$recentFileName');
-        _imageFile = null;
-      } else {
-        _imageFile = File('${directory.path}/$recentFileName');
-        _videoFile = null;
-      }
-      setState(() {});
-    }
-  }
+  // refreshAlreadyCapturedImages() async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   List<FileSystemEntity> fileList = await directory.list().toList();
+  //   allFileList.clear();
+  //   List<Map<int, dynamic>> fileNames = [];
+  //   for (var file in fileList) {
+  //     if (file.path.contains('.jpg') || file.path.contains('.mp4')) {
+  //       allFileList.add(File(file.path));
+  //       String name = file.path.split('/').last.split('.').first;
+  //       fileNames.add({0: int.parse(name), 1: file.path.split('/').last});
+  //     }
+  //   }
+  //   if (fileNames.isNotEmpty) {
+  //     final recentFile =
+  //         fileNames.reduce((curr, next) => curr[0] > next[0] ? curr : next);
+  //     String recentFileName = recentFile[1];
+  //     if (recentFileName.contains('.mp4')) {
+  //       _videoFile = File('${directory.path}/$recentFileName');
+  //       _imageFile = null;
+  //     } else {
+  //       _imageFile = File('${directory.path}/$recentFileName');
+  //       _videoFile = null;
+  //     }
+  //     setState(() {});
+  //   }
+  // }
 
   Future<XFile?> takePicture() async {
     final CameraController? cameraController = controller;
@@ -558,17 +556,17 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                                   XFile? rawVideo = await stopVideoRecording();
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
-                                          const VideoPlayerScreen()));
-                                  File videoFile = File(rawVideo!.path);
-                                  int currentUnix =
-                                      DateTime.now().millisecondsSinceEpoch;
-                                  final directory =
-                                      await getApplicationDocumentsDirectory();
-                                  String fileFormat =
-                                      videoFile.path.split('.').last;
-                                  _videoFile = await videoFile.copy(
-                                    '${directory.path}/$currentUnix.$fileFormat',
-                                  );
+                                          PreviewScreen({"video": rawVideo})));
+                                  // File videoFile = File(rawVideo!.path);
+                                  // int currentUnix =
+                                  //     DateTime.now().millisecondsSinceEpoch;
+                                  // final directory =
+                                  //     await getApplicationDocumentsDirectory();
+                                  // String fileFormat =
+                                  //     videoFile.path.split('.').last;
+                                  // _videoFile = await videoFile.copy(
+                                  //   '${directory.path}/$currentUnix.$fileFormat',
+                                  // );
                                 } else {
                                   await startVideoRecording();
                                 }
