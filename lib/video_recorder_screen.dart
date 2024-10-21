@@ -298,6 +298,36 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                         }),
                       ),
                     ),
+                    Positioned(
+                      top: 45,
+                      left: 20,
+                      child: InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 45,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 206, 66, 56),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: CustomTimer(
+                            controller: _controller!,
+                            builder: (state, time) {
+                              return Text(
+                                  "${time.hours}:${time.minutes}:${time.seconds}",
+                                  style: const TextStyle(
+                                      fontSize: 24.0, color: Colors.white));
+                            }),
+                      ),
+                    ),
                   ],
                 )
               : const Center(
