@@ -328,6 +328,53 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                             }),
                       ),
                     ),
+                    Positioned(
+                      right: 5,
+                      top: MediaQuery.of(context).size.height * .2,
+                      height: MediaQuery.of(context).size.height * .5,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 8.0, top: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  '${_currentExposureOffset.toStringAsFixed(1)}x',
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: Container(
+                                height: 30,
+                                child: Slider(
+                                  value: _currentExposureOffset,
+                                  min: _minAvailableExposureOffset,
+                                  max: _maxAvailableExposureOffset,
+                                  activeColor: Colors.white,
+                                  inactiveColor: Colors.white30,
+                                  onChanged: (value) async {
+                                    setState(() {
+                                      _currentExposureOffset = value;
+                                    });
+                                    await controller!.setExposureOffset(value);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )
               : const Center(
