@@ -5,14 +5,14 @@ import 'package:video_player/video_player.dart';
 
 // import 'package:video_editor/video_editor.dart';
 
-class PreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
-  const PreviewScreen(this.args, {super.key});
+  const VideoPreviewScreen(this.args, {super.key});
   @override
-  State<PreviewScreen> createState() => _PreviewScreenState();
+  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
 }
 
-class _PreviewScreenState extends State<PreviewScreen> {
+class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
   XFile? videoFile;
   VideoPlayerController? _controller;
 
@@ -60,7 +60,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
         });
       }
     } catch (err) {
-      print(err.toString());
       if (mounted) {
         setState(() {
           isLoading = false;

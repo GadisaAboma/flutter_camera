@@ -55,7 +55,7 @@ class HomeWidget extends StatelessWidget {
               );
             },
             label: const Text(
-              "Go To Record Video",
+              "Open Recorder",
               style: TextStyle(color: Colors.white),
             ),
           ),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_camera/video_player.dart';
+import 'package:flutter_camera/video_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -315,7 +315,7 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 206, 66, 56),
+                            color: const Color(0xFFE94057),
                             borderRadius: BorderRadius.circular(10)),
                         child: CustomTimer(
                             controller: _controller!,
@@ -555,18 +555,8 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                                 if (_isRecordingInProgress) {
                                   XFile? rawVideo = await stopVideoRecording();
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          PreviewScreen({"video": rawVideo})));
-                                  // File videoFile = File(rawVideo!.path);
-                                  // int currentUnix =
-                                  //     DateTime.now().millisecondsSinceEpoch;
-                                  // final directory =
-                                  //     await getApplicationDocumentsDirectory();
-                                  // String fileFormat =
-                                  //     videoFile.path.split('.').last;
-                                  // _videoFile = await videoFile.copy(
-                                  //   '${directory.path}/$currentUnix.$fileFormat',
-                                  // );
+                                      builder: (context) => VideoPreviewScreen(
+                                          {"video": rawVideo})));
                                 } else {
                                   await startVideoRecording();
                                 }
@@ -574,18 +564,18 @@ class _VideoRecorderScreenState extends State<VideoRecorderScreen>
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.circle,
                                     color: Colors.white,
                                     size: 80,
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.circle,
-                                    color: Colors.red,
+                                    color: Color(0xFFE94057),
                                     size: 65,
                                   ),
                                   _isRecordingInProgress
-                                      ? Icon(
+                                      ? const Icon(
                                           Icons.stop_rounded,
                                           color: Colors.white,
                                           size: 32,
